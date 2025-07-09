@@ -15,6 +15,18 @@ in
       };
     };
     
+    # Global ignore patterns
+    ignores = [
+      "**/.claude/settings.local.json"
+      ".DS_Store"
+      "*.swp"
+      "*.swo"
+      "*~"
+      ".env.local"
+      ".vscode/"
+      ".idea/"
+    ];
+    
     extraConfig = {
       init.defaultBranch = "main";
       pull.rebase = true;

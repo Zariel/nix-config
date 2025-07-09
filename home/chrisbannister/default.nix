@@ -18,6 +18,7 @@
     shell.fish.enable = true;
     programs.tmux.enable = true;
     programs.atuin.enable = true;
+    programs.alacritty.enable = true;
   };
   
   # User-specific git configuration

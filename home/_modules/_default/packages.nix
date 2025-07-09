@@ -26,6 +26,7 @@
     # Terminal tools
     tmux
     atuin
+    alacritty
     
     # Nix tools
     nix-tree
