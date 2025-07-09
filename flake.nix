@@ -124,7 +124,8 @@ auto-format = true
 [[language]]
 name = "nix"
 auto-format = true
-formatter = { command = "nixfmt" }
+formatter = { command = "nixfmt", args = [] }
+language-servers = [ "nil" ]
 EOF
           fi
         '';
