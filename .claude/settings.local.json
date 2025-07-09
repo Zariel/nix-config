@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(mkdir:*)",
+      "Bash(nix flake check:*)",
+      "Bash(darwin-rebuild:*)"
+    ],
+    "deny": []
+  }
+}

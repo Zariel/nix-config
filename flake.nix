@@ -23,181 +23,83 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     
-    # Secrets management (sops fallback)
+    # Secrets management
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, nixpkgs-stable, nix-darwin, home-manager, deploy-rs, sops-nix, ... }@inputs: 
+  outputs = { self, nixpkgs, ... }@inputs: 
   let
-    inherit (self) outputs;
-    
-    # Helper to create user configs based on hostname
-    mkUser = hostname: 
-      if hostname == "macbook" then "chrisbannister"
-      else "chris";
-    
-    # Supported systems
-    systems = [ "aarch64-darwin" "x86_64-linux" ];
-    
-    # Helper function to generate configs for each system
-    forAllSystems = nixpkgs.lib.genAttrs systems;
-    
-    # Create pkgs for each system
-    pkgsFor = nixpkgs.lib.genAttrs systems (system: import nixpkgs {
-      inherit system;
-      config.allowUnfree = true;
-    });
+    flakeLib = import ./flakeLib.nix { inherit self inputs; };
+    inherit (flakeLib) mkDarwinSystem mkNixosSystem mkHome forAllSystems;
   in
   {
-    # Development shells for each system
+    # Development shells
     devShells = forAllSystems (system: {
-      default = pkgsFor.${system}.mkShell {
-        buildInputs = with pkgsFor.${system}; [
+      default = nixpkgs.legacyPackages.${system}.mkShell {
+        buildInputs = with nixpkgs.legacyPackages.${system}; [
           # Nix tools
           nixfmt-rfc-style
-          nil  # Nix LSP
+          nil
           
           # Deployment
-          deploy-rs.packages.${system}.default
+          inputs.deploy-rs.packages.${system}.default
           
           # Development tools
           git
           helix
           fish
-          
-          # Language servers for Helix
-          gopls
-          texlab
-          ltex-ls
-          ruff
-          pyright
         ];
         
         shellHook = ''
           echo "🚀 Nix development environment loaded!"
           echo "Available tools: nixfmt, nil, deploy-rs, git, helix, fish"
-          
-          # Set up Helix config if it doesn't exist
-          mkdir -p ~/.config/helix
-          if [ ! -f ~/.config/helix/config.toml ]; then
-            cat > ~/.config/helix/config.toml << 'EOF'
-theme = "penumbra+"
-
-[editor]
-end-of-line-diagnostics = "hint"
-
-[editor.inline-diagnostics]
-cursor-line = "error"
-
-[editor.soft-wrap]
-enable = true
-
-[keys.normal]
-"C-d" = ["move_prev_word_start", "move_next_word_end", "search_selection", "extend_search_next"]
-EOF
-          fi
-          
-          if [ ! -f ~/.config/helix/languages.toml ]; then
-            cat > ~/.config/helix/languages.toml << 'EOF'
-[language-server.gopls.config]
-"formatting.gofumpt" = true
-
-[language-server.ltex-ls.config.ltex]
-language = "en-GB"
-
-[[language]]
-name = "latex"
-language-servers = [ "texlab", "ltex-ls" ]
-
-[[language]]
-name = "go"
-auto-format = true
-
-[[language]]
-name = "python"
-formatter = { command = "ruff", args = ["format", "--line-length", "88", "-"] }
-auto-format = true
-
-[[language]]
-name = "nix"
-auto-format = true
-formatter = { command = "nixfmt", args = [] }
-language-servers = [ "nil" ]
-EOF
-          fi
         '';
       };
     });
 
     # macOS configurations
     darwinConfigurations = {
-      macbook = nix-darwin.lib.darwinSystem {
+      macbook = mkDarwinSystem {
+        hostname = "macbook";
         system = "aarch64-darwin";
-        specialArgs = { 
-          inherit inputs outputs; 
-          username = mkUser "macbook";
-        };
-        modules = [
-          ./hosts/macbook
-          home-manager.darwinModules.home-manager
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.${mkUser "macbook"} = import ./home;
-              extraSpecialArgs = { 
-                inherit inputs outputs; 
-                username = mkUser "macbook";
-                hostname = "macbook";
-              };
-            };
-          }
-        ];
+        username = "chrisbannister";
       };
     };
 
-    # NixOS configurations
+    # NixOS configurations (for future use)
     nixosConfigurations = {
-      router = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { 
-          inherit inputs outputs; 
-          username = mkUser "router";
-        };
-        modules = [
-          ./hosts/router
-          home-manager.nixosModules.home-manager
-          sops-nix.nixosModules.sops
-          {
-            home-manager = {
-              useGlobalPkgs = true;
-              useUserPackages = true;
-              users.${mkUser "router"} = import ./home;
-              extraSpecialArgs = { 
-                inherit inputs outputs; 
-                username = mkUser "router";
-                hostname = "router";
-              };
-            };
-          }
-        ];
+      # router = mkNixosSystem {
+      #   hostname = "router";
+      #   system = "x86_64-linux";
+      #   username = "chris";
+      # };
+    };
+
+    # Standalone home configurations
+    homeConfigurations = {
+      "chrisbannister@macbook" = mkHome {
+        hostname = "macbook";
+        system = "aarch64-darwin";
+        username = "chrisbannister";
       };
     };
 
-    # Deploy-rs configuration
-    deploy.nodes.router = {
-      hostname = "router.local";  # Adjust as needed
-      profiles.system = {
-        user = "root";
-        path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.router;
-        remoteBuild = true;
-      };
-    };
+    # Deploy-rs configuration (for future use)
+    # deploy.nodes.router = {
+    #   hostname = "router.local";
+    #   profiles.system = {
+    #     user = "root";
+    #     path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.router;
+    #     remoteBuild = true;
+    #   };
+    # };
 
-    # Deploy-rs checks
-    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+    # Checks
+    checks = forAllSystems (system: {
+      # Add checks here
+    });
   };
 }
