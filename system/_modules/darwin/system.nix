@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   # Only apply on Darwin systems
   config = lib.mkIf pkgs.stdenv.isDarwin {
@@ -14,7 +19,7 @@
         orientation = "bottom";
         mru-spaces = false;
       };
-      
+
       # Finder settings
       finder = {
         AppleShowAllExtensions = true;
@@ -24,7 +29,7 @@
         ShowPathbar = true;
         ShowStatusBar = true;
       };
-      
+
       # Global macOS settings
       NSGlobalDomain = {
         AppleInterfaceStyle = "Dark";
@@ -40,23 +45,23 @@
         NSNavPanelExpandedStateForSaveMode = true;
         NSNavPanelExpandedStateForSaveMode2 = true;
       };
-      
+
       # Control center
       controlcenter = {
         BatteryShowPercentage = true;
         Sound = true;
       };
-      
+
       # Login window
       loginwindow = {
         GuestEnabled = false;
       };
-      
+
       # Spaces
       spaces = {
         spans-displays = false;
       };
-      
+
       # Trackpad
       trackpad = {
         Clicking = true;
@@ -64,13 +69,17 @@
         TrackpadThreeFingerDrag = true;
       };
     };
-    
+
     # Enable Touch ID for sudo
     security.pam.services.sudo_local.touchIdAuth = true;
-    
+
     # Shell configuration
-    environment.shells = with pkgs; [ fish bash zsh ];
-    
+    environment.shells = with pkgs; [
+      fish
+      bash
+      zsh
+    ];
+
     # System packages
     environment.systemPackages = with pkgs; [
       terminal-notifier

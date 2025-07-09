@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.myModules.shell.fish;
 in
@@ -6,36 +11,34 @@ in
   options.myModules.shell.fish = {
     enable = lib.mkEnableOption "Fish shell";
   };
-  
+
   config = lib.mkIf cfg.enable {
     programs.fish = {
       enable = true;
-      
+
       interactiveShellInit = ''
         set fish_greeting # Disable greeting
-        
+
         # Better defaults
-        set -gx EDITOR hx
-        set -gx VISUAL hx
-        set -gx GIT_EDITOR hx
-        set -gx PAGER less
-        
+        set -Ux EDITOR hx
+        set -Ux GIT_EDITOR hx
+
         # Homebrew settings
-        set -gx HOMEBREW_NO_ENV_HINTS 1
-        
+        set -Ux HOMEBREW_NO_ENV_HINTS 1
+
         # Go settings
-        set -gx GOBIN $HOME/bin
-        
+        set -Ux GOBIN $HOME/bin
+
         # Add paths
         fish_add_path $HOME/bin
         fish_add_path $HOME/.local/bin
-        
+
         # Kubernetes krew (if it exists)
         set -q KREW_ROOT; and fish_add_path $KREW_ROOT/.krew/bin; or fish_add_path $HOME/.krew/bin
-        
-        # Enable vi mode
-        fish_vi_key_bindings
-        
+
+        # Use default (emacs-style) key bindings, not vi mode
+        fish_default_key_bindings
+
         # Custom colors (Penumbra-inspired theme)
         set --universal fish_color_autosuggestion 4D5566
         set --universal fish_color_cancel \x2d\x2dreverse
@@ -59,19 +62,19 @@ in
         set --universal fish_color_status red
         set --universal fish_color_user brgreen
         set --universal fish_color_valid_path \x2d\x2dunderline
-        
+
         # Pager colors
         set --universal fish_pager_color_completion normal
         set --universal fish_pager_color_description B3A06D
         set --universal fish_pager_color_prefix normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
         set --universal fish_pager_color_progress brwhite\x1e\x2d\x2dbackground\x3dcyan
         set --universal fish_pager_color_selected_background \x2d\x2dbackground\x3dE6B450
-        
+
         # Override ls function with eza
         function ls --wraps eza --description 'Use eza instead of ls'
           command eza $argv
         end
-        
+
         # FZF + Atuin integration
         function fzf-history-widget -d "Show command history"
           test -n "$FZF_TMUX_HEIGHT"; or set FZF_TMUX_HEIGHT 40%
@@ -96,48 +99,20 @@ in
           end
           commandline -f repaint
         end
-        
+
         # Bind Ctrl+R to fzf-history-widget
         bind \cr fzf-history-widget
         if bind -M insert >/dev/null 2>&1
           bind -M insert \cr fzf-history-widget
         end
       '';
-      
+
       shellAliases = {
-        # Navigation
-        ".." = "cd ..";
-        "..." = "cd ../..";
-        "...." = "cd ../../..";
-        
-        # Replacements
-        ll = "eza -l";
-        la = "eza -la";
-        tree = "eza --tree";
-        cat = "bat";
-        
-        # Legacy vim alias
-        vim = "hx";  # Use helix instead of nvim
-        
-        # Kubernetes
+        # Original aliases from dotfiles
+        vim = "nvim";
         k = "kubectl";
-        
-        # Git shortcuts
-        g = "git";
-        gs = "git status";
-        ga = "git add";
-        gc = "git commit";
-        gp = "git push";
-        gl = "git log --oneline --graph";
-        
-        # Nix shortcuts
-        nr = "nixos-rebuild";
-        nrs = "nixos-rebuild switch";
-        nfu = "nix flake update";
-        nfc = "nix flake check";
-        ndev = "nix develop";
       };
-      
+
       plugins = [
         {
           name = "z";
@@ -148,7 +123,7 @@ in
           src = pkgs.fishPlugins.done.src;
         }
       ];
-      
+
       functions = {
         fish_prompt = {
           body = ''
@@ -159,7 +134,7 @@ in
                 function _git_branch_name
                     set -l branch (git symbolic-ref --quiet HEAD 2>/dev/null)
                     if set -q branch[1]
-                        echo (string replace -r '^refs/heads/' \'\' $branch)
+                        echo (string replace -r '^refs/heads/' "" $branch)
                     else
                         echo (git rev-parse --short HEAD 2>/dev/null)
                     end
@@ -239,11 +214,11 @@ in
                 end
             end
 
-            echo -n -s $arrow \' \' $cwd $repo_info $normal \' \'
+            echo -n -s $arrow " " $cwd $repo_info $normal " "
           '';
         };
       };
     };
-    
+
   };
 }

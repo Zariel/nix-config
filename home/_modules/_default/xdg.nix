@@ -1,9 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   config = lib.mkIf pkgs.stdenv.isLinux {
     xdg = {
       enable = true;
-      
+
       # Set up XDG directories
       userDirs = {
         enable = true;
@@ -17,7 +22,7 @@
         templates = "${config.home.homeDirectory}/Templates";
         videos = "${config.home.homeDirectory}/Videos";
       };
-      
+
       # Configure mimeapps
       mimeApps = {
         enable = true;

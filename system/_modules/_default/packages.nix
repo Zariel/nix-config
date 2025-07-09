@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   # System-wide packages
   environment.systemPackages = with pkgs; [
@@ -7,11 +12,11 @@
     git
     curl
     wget
-    
+
     # System tools
     htop
     lsof
-    
+
     # Nix tools
     nix-tree
   ];

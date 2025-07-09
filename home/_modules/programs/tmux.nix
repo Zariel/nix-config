@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.myModules.programs.tmux;
 in
@@ -6,23 +11,23 @@ in
   options.myModules.programs.tmux = {
     enable = lib.mkEnableOption "tmux terminal multiplexer";
   };
-  
+
   config = lib.mkIf cfg.enable {
     programs.tmux = {
       enable = true;
-      
+
       # Basic settings
       baseIndex = 1;
       escapeTime = 0;
       historyLimit = 10000;
       mouse = true;
       keyMode = "vi";
-      
+
       # Import your existing configuration
       extraConfig = ''
         # Set default shell to fish
         set -g default-shell ${pkgs.fish}/bin/fish
-        
+
         set -g default-terminal "$TERM"
         set -ag terminal-overrides ",$TERM:Tc"
 
