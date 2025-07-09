@@ -16,6 +16,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.atuin = {
       enable = true;
+      enableFishIntegration = false;  # Disable automatic integration
       
       settings = {
         # Date format
@@ -49,6 +50,12 @@ in
       };
     };
     
-    # Atuin is automatically integrated by home-manager
+    # Manual Fish integration with PATH safety
+    programs.fish.interactiveShellInit = lib.mkAfter ''
+      # Atuin integration - only if command is available
+      if command -q atuin
+        atuin init fish | source
+      end
+    '';
   };
 }
