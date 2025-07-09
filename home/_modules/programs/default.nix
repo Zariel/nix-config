@@ -1,6 +1,7 @@
 { ... }:
 {
   imports = [
-    # Add program modules here as needed
+    ./tmux.nix
+    ./atuin.nix
   ];
 }

@@ -51,11 +51,19 @@
           git
           helix
           fish
+          
+          # CLI tools that fish aliases expect
+          eza
+          bat
+          ripgrep
+          fd
+          zoxide
+          fzf
         ];
         
         shellHook = ''
           echo "🚀 Nix development environment loaded!"
-          echo "Available tools: nixfmt, nil, deploy-rs, git, helix, fish"
+          echo "Available tools: nixfmt, nil, deploy-rs, git, helix, fish, eza, bat, ripgrep"
         '';
       };
     });

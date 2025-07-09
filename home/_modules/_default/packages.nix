@@ -23,6 +23,10 @@
     btop
     ncdu
     
+    # Terminal tools
+    tmux
+    atuin
+    
     # Nix tools
     nix-tree
     nix-output-monitor
