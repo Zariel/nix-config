@@ -34,6 +34,11 @@
   let
     inherit (self) outputs;
     
+    # Helper to create user configs based on hostname
+    mkUser = hostname: 
+      if hostname == "macbook" then "chrisbannister"
+      else "chris";
+    
     # Supported systems
     systems = [ "aarch64-darwin" "x86_64-linux" ];
     
@@ -62,11 +67,66 @@
           git
           helix
           fish
+          
+          # Language servers for Helix
+          gopls
+          texlab
+          ltex-ls
+          ruff
+          pyright
         ];
         
         shellHook = ''
           echo "🚀 Nix development environment loaded!"
           echo "Available tools: nixfmt, nil, deploy-rs, git, helix, fish"
+          
+          # Set up Helix config if it doesn't exist
+          mkdir -p ~/.config/helix
+          if [ ! -f ~/.config/helix/config.toml ]; then
+            cat > ~/.config/helix/config.toml << 'EOF'
+theme = "penumbra+"
+
+[editor]
+end-of-line-diagnostics = "hint"
+
+[editor.inline-diagnostics]
+cursor-line = "error"
+
+[editor.soft-wrap]
+enable = true
+
+[keys.normal]
+"C-d" = ["move_prev_word_start", "move_next_word_end", "search_selection", "extend_search_next"]
+EOF
+          fi
+          
+          if [ ! -f ~/.config/helix/languages.toml ]; then
+            cat > ~/.config/helix/languages.toml << 'EOF'
+[language-server.gopls.config]
+"formatting.gofumpt" = true
+
+[language-server.ltex-ls.config.ltex]
+language = "en-GB"
+
+[[language]]
+name = "latex"
+language-servers = [ "texlab", "ltex-ls" ]
+
+[[language]]
+name = "go"
+auto-format = true
+
+[[language]]
+name = "python"
+formatter = { command = "ruff", args = ["format", "--line-length", "88", "-"] }
+auto-format = true
+
+[[language]]
+name = "nix"
+auto-format = true
+formatter = { command = "nixfmt" }
+EOF
+          fi
         '';
       };
     });
@@ -75,7 +135,10 @@
     darwinConfigurations = {
       macbook = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        specialArgs = { inherit inputs outputs; };
+        specialArgs = { 
+          inherit inputs outputs; 
+          username = mkUser "macbook";
+        };
         modules = [
           ./hosts/macbook
           home-manager.darwinModules.home-manager
@@ -83,8 +146,12 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.zariel = import ./home/darwin.nix;
-              extraSpecialArgs = { inherit inputs outputs; };
+              users.${mkUser "macbook"} = import ./home;
+              extraSpecialArgs = { 
+                inherit inputs outputs; 
+                username = mkUser "macbook";
+                hostname = "macbook";
+              };
             };
           }
         ];
@@ -95,7 +162,10 @@
     nixosConfigurations = {
       router = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs outputs; };
+        specialArgs = { 
+          inherit inputs outputs; 
+          username = mkUser "router";
+        };
         modules = [
           ./hosts/router
           home-manager.nixosModules.home-manager
@@ -104,8 +174,12 @@
             home-manager = {
               useGlobalPkgs = true;
               useUserPackages = true;
-              users.zariel = import ./home/nixos.nix;
-              extraSpecialArgs = { inherit inputs outputs; };
+              users.${mkUser "router"} = import ./home;
+              extraSpecialArgs = { 
+                inherit inputs outputs; 
+                username = mkUser "router";
+                hostname = "router";
+              };
             };
           }
         ];
