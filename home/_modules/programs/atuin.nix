@@ -51,9 +51,11 @@ in
     
     # Enable atuin integration for fish
     programs.fish.interactiveShellInit = lib.mkAfter ''
-      # Atuin integration
+      # Atuin integration - check multiple possible locations
       if command -q atuin
         atuin init fish | source
+      else if test -x /opt/homebrew/bin/atuin
+        /opt/homebrew/bin/atuin init fish | source
       end
     '';
   };
