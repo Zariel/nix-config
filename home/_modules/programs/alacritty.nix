@@ -37,7 +37,26 @@ in
         general = {
           live_config_reload = true;
         };
+        
       };
     };
+    
+    # Create app bundle for macOS dock integration
+    home.activation.aliasApplications = lib.mkIf pkgs.stdenv.isDarwin (
+      lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        app_folder="$HOME/Applications/Home Manager Apps"
+        if [[ ! -d "$app_folder" ]]; then
+          $DRY_RUN_CMD mkdir -p "$app_folder"
+        fi
+        
+        # Remove old Alacritty alias if it exists
+        $DRY_RUN_CMD rm -f "$app_folder/Alacritty.app"
+        
+        # Create new alias to the Nix-installed Alacritty
+        if [[ -d "${pkgs.alacritty}/Applications/Alacritty.app" ]]; then
+          $DRY_RUN_CMD ln -sf "${pkgs.alacritty}/Applications/Alacritty.app" "$app_folder/"
+        fi
+      ''
+    );
   };
 }

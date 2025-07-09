@@ -20,6 +20,9 @@ in
       
       # Import your existing configuration
       extraConfig = ''
+        # Set default shell to fish
+        set -g default-shell ${pkgs.fish}/bin/fish
+        
         set -g default-terminal "$TERM"
         set -ag terminal-overrides ",$TERM:Tc"
 

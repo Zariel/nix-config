@@ -68,6 +68,9 @@
     # Enable Touch ID for sudo
     security.pam.services.sudo_local.touchIdAuth = true;
     
+    # Shell configuration
+    environment.shells = with pkgs; [ fish bash zsh ];
+    
     # System packages
     environment.systemPackages = with pkgs; [
       terminal-notifier
