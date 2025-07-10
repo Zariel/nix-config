@@ -12,13 +12,20 @@
     # macOS utilities
     mas # Mac App Store CLI
     dockutil
+
+    flac
+    streamrip
+    ffmpeg
+    # mkvtoolnix-cli
   ];
 
-  # macOS-specific shell configuration
-  programs.fish.interactiveShellInit = lib.mkAfter ''
-    # Add Homebrew to PATH if it exists
-    if test -d /opt/homebrew/bin
-      set -gx PATH /opt/homebrew/bin $PATH
-    end
-  '';
+  # PATH management - local tools first, then Homebrew after Nix paths
+  home.sessionPath = lib.mkAfter [
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+  ];
+
+  programs.fish.shellAliases = {
+    salmon = "/Users/chrisbannister/tools/smoked-salmon/.venv/bin/salmon";
+  };
 }

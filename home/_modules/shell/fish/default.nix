@@ -33,7 +33,6 @@ in
           set fish_greeting # Disable greeting
 
           # Better defaults
-          set -Ux EDITOR hx
           set -Ux GIT_EDITOR hx
 
           # Homebrew settings

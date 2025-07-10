@@ -15,6 +15,7 @@ in
   config = lib.mkIf cfg.enable {
     programs.tmux = {
       enable = true;
+      shell = "${pkgs.fish}/bin/fish";
 
       # Basic settings
       baseIndex = 1;
@@ -26,7 +27,9 @@ in
       # Import your existing configuration
       extraConfig = ''
         # Set default shell to fish
-        set -g default-shell ${pkgs.fish}/bin/fish
+
+        # Ensure EDITOR is passed through to tmux sessions
+        set -g update-environment "EDITOR"
 
         set -g default-terminal "$TERM"
         set -ag terminal-overrides ",$TERM:Tc"

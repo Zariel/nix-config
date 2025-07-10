@@ -40,11 +40,7 @@ in
 
         # Development
         "visual-studio-code"
-        "iterm2"
 
-        # Utilities
-        "rectangle" # Window management
-        "alfred"
         "1password"
 
         # Fonts
