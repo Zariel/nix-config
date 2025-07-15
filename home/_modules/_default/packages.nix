@@ -17,6 +17,7 @@
     eza
     zoxide
     fzf
+    perl
 
     # Development tools
     jq
@@ -52,5 +53,6 @@
     nix-tree
     nix-output-monitor
     nh
+    home-manager
   ];
 }

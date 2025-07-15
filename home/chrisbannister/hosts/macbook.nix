@@ -27,5 +27,6 @@
 
   programs.fish.shellAliases = {
     salmon = "/Users/chrisbannister/tools/smoked-salmon/.venv/bin/salmon";
+    reflac = "flac -f8ep --replay-gain -j8 *.flac";
   };
 }

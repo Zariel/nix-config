@@ -21,7 +21,6 @@
 
   # Enable modules
   myModules = {
-    editor.helix.enable = true;
     shell.fish.enable = true;
     programs.tmux.enable = true;
     programs.atuin.enable = true;
