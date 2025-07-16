@@ -73,8 +73,11 @@
       };
     };
 
-    # Enable Touch ID for sudo
-    security.pam.services.sudo_local.touchIdAuth = true;
+    # Enable Touch ID for sudo with pam_reattach for tmux support
+    security.pam.services.sudo_local = {
+      touchIdAuth = true;
+      reattach = true;
+    };
 
     # Shell configuration
     environment.shells = with pkgs; [
