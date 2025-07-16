@@ -35,6 +35,12 @@ rec {
             };
             # Backup existing files instead of failing
             backupFileExtension = "backup";
+            # Add host-specific nix-switch alias for all Darwin hosts
+            sharedModules = [
+              {
+                programs.fish.shellAliases.nix-switch = "nh darwin switch .#darwinConfigurations.${hostname}";
+              }
+            ];
           };
         }
       ];
@@ -72,6 +78,12 @@ rec {
             };
             # Backup existing files instead of failing
             backupFileExtension = "backup";
+            # Add host-specific nix-switch alias for all NixOS hosts
+            sharedModules = [
+              {
+                programs.fish.shellAliases.nix-switch = "nh os switch .#nixosConfigurations.${hostname}";
+              }
+            ];
           };
         }
       ];
