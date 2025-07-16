@@ -17,12 +17,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # Deployment tool
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     # Secrets management
     sops-nix = {
       url = "github:Mic92/sops-nix";
@@ -51,12 +45,9 @@
       devShells = forAllSystems (system: {
         default = nixpkgs.legacyPackages.${system}.mkShell {
           buildInputs = with nixpkgs.legacyPackages.${system}; [
-            # Nix development tools only
+            # Nix tools
             nixfmt-rfc-style
             nil
-
-            # Deployment
-            inputs.deploy-rs.packages.${system}.default
           ];
         };
       });
@@ -87,16 +78,6 @@
           username = "chrisbannister";
         };
       };
-
-      # Deploy-rs configuration (for future use)
-      # deploy.nodes.router = {
-      #   hostname = "router.local";
-      #   profiles.system = {
-      #     user = "root";
-      #     path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.router;
-      #     remoteBuild = true;
-      #   };
-      # };
 
       # Checks
       checks = forAllSystems (system: {

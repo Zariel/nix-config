@@ -30,7 +30,6 @@
     # System monitoring
     htop
     btop
-    ncdu
 
     # Terminal tools
     tmux
