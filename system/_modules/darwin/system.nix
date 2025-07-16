@@ -18,6 +18,9 @@
         show-process-indicators = true;
         orientation = "bottom";
         mru-spaces = false;
+        persistent-apps = [
+          "${pkgs.alacritty}/Applications/Alacritty.app"
+        ];
       };
 
       # Finder settings
