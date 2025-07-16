@@ -53,6 +53,5 @@
     nix-tree
     nix-output-monitor
     nh
-    home-manager
   ];
 }

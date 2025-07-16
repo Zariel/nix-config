@@ -28,6 +28,11 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    helix = {
+      url = "github:helix-editor/helix/25.07";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -46,25 +51,12 @@
       devShells = forAllSystems (system: {
         default = nixpkgs.legacyPackages.${system}.mkShell {
           buildInputs = with nixpkgs.legacyPackages.${system}; [
-            # Nix tools
+            # Nix development tools only
             nixfmt-rfc-style
             nil
 
             # Deployment
             inputs.deploy-rs.packages.${system}.default
-
-            # Development tools
-            git
-            helix
-            fish
-
-            # CLI tools that fish aliases expect
-            eza
-            bat
-            ripgrep
-            fd
-            zoxide
-            fzf
           ];
         };
       });
