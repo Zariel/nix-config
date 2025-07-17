@@ -37,6 +37,6 @@
   # User-specific git configuration
   programs.git = {
     userName = "Chris Bannister";
-    userEmail = "chris@chrisbannister.com"; # Update with your email
+    userEmail = "c.bannister@gmail.com";
   };
 }

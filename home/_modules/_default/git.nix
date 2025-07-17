@@ -11,9 +11,6 @@ in
   programs.git = {
     enable = lib.mkDefault true;
 
-    userName = "Chris Bannister";
-    userEmail = "chris@chrisbannister.com";
-
     delta = {
       enable = true;
       options = {
