@@ -18,34 +18,22 @@ in
 
       onActivation = {
         autoUpdate = true;
-        cleanup = "zap";
+        cleanup = "uninstall";
         upgrade = true;
       };
 
       # Taps
       taps = [
-        "homebrew/cask-fonts"
       ];
 
       # Homebrew packages
       brews = [
-        # Add any brew packages here
       ];
 
       # Cask applications
       casks = [
-        # Browsers
-        "firefox"
-        "google-chrome"
-
-        # Development
-        "visual-studio-code"
-
         "1password"
-
-        # Fonts
-        "font-fira-code-nerd-font"
-        "font-jetbrains-mono-nerd-font"
+        "firefox"
       ];
 
       # Mac App Store apps

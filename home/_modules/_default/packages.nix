@@ -42,6 +42,7 @@
 
     # Language servers and formatters
     rust-analyzer
+    gopls
     # TODO: Add more LSPs as needed
 
     # Archive tools

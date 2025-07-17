@@ -45,6 +45,8 @@ in
     talosctl
     talhelper
     cilium-cli
+
+    claude-code
   ];
 
   # PATH management - Don't add Homebrew paths to ensure Nix has priority

@@ -19,5 +19,8 @@
 
     # Nix tools
     nix-tree
+
+    # 1Password CLI (GUI will be installed via Homebrew)
+    _1password-cli
   ];
 }
