@@ -13,7 +13,7 @@ in
   };
 
   config = lib.mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
-    homebrew = {
+    homebrew = lib.mkIf (!(builtins.getEnv "CI" == "true")) {
       enable = true;
 
       onActivation = {

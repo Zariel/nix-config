@@ -34,21 +34,25 @@ jobs:
         fi
     
     - name: Build Darwin system configuration
+      env:
+        NIXPKGS_ALLOW_UNFREE: 1
       run: |
         echo "Building Darwin system configuration..."
-        if ! nix build .#darwinConfigurations.macbook.system; then
+        if ! nix build .#darwinConfigurations.macbook.system --impure; then
           echo "❌ Darwin system configuration failed to build"
-          echo "To test locally, run: nix build .#darwinConfigurations.macbook.system"
+          echo "To test locally, run: nix build .#darwinConfigurations.macbook.system --impure"
           exit 1
         fi
         echo "✅ Darwin system configuration builds successfully"
     
     - name: Build Home Manager configuration
+      env:
+        NIXPKGS_ALLOW_UNFREE: 1
       run: |
         echo "Building Home Manager configuration..."
-        if ! nix build .#homeConfigurations.\"chrisbannister@macbook\".activationPackage; then
+        if ! nix build .#homeConfigurations.\"chrisbannister@macbook\".activationPackage --impure; then
           echo "❌ Home Manager configuration failed to build"
-          echo "To test locally, run: nix build .#homeConfigurations.\"chrisbannister@macbook\".activationPackage"
+          echo "To test locally, run: nix build .#homeConfigurations.\"chrisbannister@macbook\".activationPackage --impure"
           exit 1
         fi
         echo "✅ Home Manager configuration builds successfully"
