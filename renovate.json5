@@ -17,10 +17,14 @@
   packageRules: [
     {
       matchManagers: ['nix'],
-      matchPackageNames: ['nixpkgs'],
+      matchPackageNames: ['nixpkgs','nixpkgs-stable' ],
       automerge: false,
-      reviewers: ['chrisbannister'],
-      assignees: ['chrisbannister']
+    },
+    {
+      matchManagers: ['nix'],
+      matchPackageNames: ['helix'],
+      automerge: true,
+      versioning: 'semver'
     },
     {
       matchManagers: ['github-actions'],
