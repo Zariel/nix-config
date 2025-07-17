@@ -4,11 +4,28 @@
   pkgs,
   ...
 }:
+let
+  # Overlay to fix streamrip on Darwin
+  streamripOverlay = final: prev: {
+    streamrip = prev.streamrip.overrideAttrs (oldAttrs: {
+      # Remove hostname-debian dependency on Darwin
+      buildInputs = builtins.filter (dep: dep.pname or "" != "hostname-debian") (
+        oldAttrs.buildInputs or [ ]
+      );
+      propagatedBuildInputs = builtins.filter (dep: dep.pname or "" != "hostname-debian") (
+        oldAttrs.propagatedBuildInputs or [ ]
+      );
+    });
+  };
+
+  # Apply overlay to pkgs
+  pkgs' = pkgs.extend streamripOverlay;
+in
 {
   # macOS-specific home configuration
 
   # Additional packages for macOS
-  home.packages = with pkgs; [
+  home.packages = with pkgs'; [
     # macOS utilities
     mas # Mac App Store CLI
     dockutil
@@ -16,14 +33,22 @@
     flac
     streamrip
     ffmpeg
+    sox
+    mp3val
+    curl
+    unzip
+    lame
+    oxipng
     # mkvtoolnix-cli
+
+    kubectl
+    talosctl
+    talhelper
+    cilium-cli
   ];
 
-  # PATH management - local tools first, then Homebrew after Nix paths
-  home.sessionPath = lib.mkAfter [
-    "/opt/homebrew/bin"
-    "/opt/homebrew/sbin"
-  ];
+  # PATH management - Don't add Homebrew paths to ensure Nix has priority
+  # Homebrew paths will be added by the system but after Nix paths
 
   programs.fish.shellAliases = {
     salmon = "/Users/chrisbannister/tools/smoked-salmon/.venv/bin/salmon";

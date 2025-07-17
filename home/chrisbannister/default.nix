@@ -27,6 +27,13 @@
     programs.alacritty.enable = true;
   };
 
+  home.packages = with pkgs; [
+    doggo
+    ripgrep
+    gnugrep
+    gnused
+  ];
+
   # User-specific git configuration
   programs.git = {
     userName = "Chris Bannister";
