@@ -56,4 +56,31 @@ in
     salmon = "/Users/chrisbannister/tools/smoked-salmon/.venv/bin/salmon";
     reflac = "flac -f8ep --replay-gain -j8 *.flac";
   };
+
+  # XLD Plugin management
+  home.file."Library/Application Support/XLD/PlugIns/XLDLogChecker.bundle" =
+    let
+      xldLogChecker = pkgs.stdenv.mkDerivation {
+        name = "xld-log-checker";
+        src = pkgs.fetchurl {
+          url = "https://sourceforge.net/projects/xld/files/XLDLogChecker-20201230.zip/download";
+          sha256 = "1h022q8c9x3q8hvkfkdi0fqhhq21d173n45fxl1w2ki1gb5l83bf";
+        };
+
+        buildInputs = [ pkgs.unzip ];
+
+        unpackPhase = ''
+          unzip $src
+        '';
+
+        installPhase = ''
+          mkdir -p $out
+          cp -r XLDLogChecker.bundle/* $out/
+        '';
+      };
+    in
+    {
+      source = xldLogChecker;
+      recursive = true;
+    };
 }

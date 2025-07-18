@@ -34,6 +34,7 @@ in
       casks = [
         "1password"
         "firefox"
+        "xld"
       ];
 
       # Mac App Store apps
