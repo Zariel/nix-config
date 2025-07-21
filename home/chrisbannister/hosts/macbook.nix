@@ -35,7 +35,6 @@ in
     ffmpeg
     sox
     mp3val
-    curl
     unzip
     lame
     oxipng
@@ -45,6 +44,13 @@ in
     talosctl
     talhelper
     cilium-cli
+    cue
+    cuelsp
+    age
+    sops
+    fluxcd
+    stern
+    kustomize
 
     claude-code
   ];

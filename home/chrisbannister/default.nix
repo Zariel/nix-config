@@ -32,6 +32,11 @@
     ripgrep
     gnugrep
     gnused
+
+    go
+
+    curl
+    shellcheck
   ];
 
   # User-specific git configuration

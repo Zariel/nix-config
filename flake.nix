@@ -48,6 +48,8 @@
             # Nix tools
             nixfmt-rfc-style
             nil
+            nix-prefetch
+            hydra-check
           ];
         };
       });
