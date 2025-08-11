@@ -12,6 +12,8 @@
     git
     curl
     wget
+    zstd
+    gzip
 
     # System tools
     htop

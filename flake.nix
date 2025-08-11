@@ -22,11 +22,6 @@
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    helix = {
-      url = "github:helix-editor/helix/25.07";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
@@ -41,6 +36,9 @@
         ;
     in
     {
+      # Overlays
+      overlays = import ./overlays { inherit inputs; };
+
       # Development shells
       devShells = forAllSystems (system: {
         default = nixpkgs.legacyPackages.${system}.mkShell {

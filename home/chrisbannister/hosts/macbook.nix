@@ -39,6 +39,7 @@ in
     lame
     oxipng
     # mkvtoolnix-cli
+    propolis
 
     kubectl
     talosctl
@@ -51,6 +52,9 @@ in
     fluxcd
     stern
     kustomize
+    helmfile
+    kubernetes-helm
+    go-task
 
     claude-code
   ];

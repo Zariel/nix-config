@@ -35,6 +35,7 @@ in
         "1password"
         "firefox"
         "xld"
+        "docker"
       ];
 
       # Mac App Store apps

@@ -46,5 +46,11 @@
         options = "--delete-older-than 7d";
       };
     };
+
+    # Only include English documentation
+    environment.variables = {
+      MANPAGER = "less -R";
+      LANG = "en_GB.UTF-8";
+    };
   };
 }

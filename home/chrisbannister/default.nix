@@ -34,6 +34,8 @@
     gnused
 
     go
+    uv
+    ty
 
     curl
     shellcheck
