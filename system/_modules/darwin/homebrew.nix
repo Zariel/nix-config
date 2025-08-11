@@ -22,27 +22,6 @@ in
         upgrade = true;
       };
 
-      # Taps
-      taps = [
-      ];
-
-      # Homebrew packages
-      brews = [
-      ];
-
-      # Cask applications
-      casks = [
-        "1password"
-        "firefox"
-        "xld"
-        "docker"
-      ];
-
-      # Mac App Store apps
-      masApps = {
-        # Add any Mac App Store apps here
-        # "App Name" = app_id;
-      };
     };
   };
 }

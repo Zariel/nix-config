@@ -23,11 +23,11 @@
   # Primary user required for many Darwin settings
   system.primaryUser = "chrisbannister";
 
-  # Enable homebrew integration
-  myModules.darwin.homebrew.enable = true;
-
-  # Add macbook-specific casks
-  homebrew.casks = lib.mkAfter [
+  homebrew.casks = [
+    "1password"
+    "firefox"
+    "xld"
+    "docker"
     "roon"
     "obsidian"
     "vlc"
@@ -37,6 +37,8 @@
   ];
 
   system.defaults.dock.persistent-apps = lib.mkAfter [
+    "${pkgs.alacritty}/Applications/Alacritty.app"
+    "/Applications/Firefox.app"
     "/Applications/Roon.app"
     "/Applications/Discord.app"
   ];

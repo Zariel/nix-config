@@ -21,6 +21,9 @@ rec {
         ./system/hosts/${hostname}
         inputs.home-manager.darwinModules.home-manager
         {
+          nixpkgs.overlays = [ self.overlays.customPackages ];
+        }
+        {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
