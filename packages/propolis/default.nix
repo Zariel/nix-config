@@ -11,10 +11,10 @@ buildGoModule rec {
     owner = "passelecasque";
     repo = "propolis";
     rev = "v${version}";
-    hash = "sha256-Uv2E4YdGXJFz4YQGOGNgqLkBkQi3LcMdW1K0WeOIMzI=";
+    hash = "sha256-FSJvImYc5/yHpRw0ZSIG5BF5qj7ErTIKyCIVkZddOQM=";
   };
 
-  vendorHash = "sha256-xXy7cOKROI6EBaLa7mYJtNx4mDO7FDegCdcCL5HTNHY=";
+  vendorHash = "sha256-ZRxf/k8YteOvq5GdmRCbYUG2dI3VrWCOAX5c6EzIfiQ=";
 
   meta = {
     description = "propolis is a tool that checks the files of FLAC releases.";
