@@ -22,6 +22,7 @@
 
     htop
     btop
+    claude-code
   ];
 
   programs = {
@@ -33,15 +34,6 @@
   programs.ssh = {
     enable = true;
     matchBlocks."*" = { identityAgent = "/home/chris/.1password/agent.sock"; };
-  };
-
-  programs.nh = {
-    enable = true;
-    flake = "/home/chris/nix-config";
-    clean = {
-      enable = true;
-      extraArgs = "--keep 5 --keep-since 3d";
-    };
   };
 
 }

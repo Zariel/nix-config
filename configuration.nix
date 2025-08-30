@@ -15,6 +15,9 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelParams = [ "mitigations=off" ];
+  boot.initrd.kernelModules = [ "amdgpu" ];
+
+  hardware.graphics.enable32Bit = true;
 
   networking.networkmanager.enable = true;
   networking.hostName = "nixos"; # Define your hostname.
@@ -129,6 +132,7 @@
     file
     ripgrep
     fd
+    pciutils
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
 

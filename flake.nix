@@ -34,10 +34,10 @@
     nur.url = "github:nix-community/NUR";
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@attrs: {
+  outputs = { self, nixpkgs, home-manager, nixos-hardware, ... }@attrs: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
-      specialArgs = attrs;
+      specialArgs = { inherit attrs; };
       modules = [
         ./configuration.nix
 
