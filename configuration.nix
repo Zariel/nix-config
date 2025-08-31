@@ -10,17 +10,8 @@
   ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = [ "mitigations=off" ];
-  boot.initrd.kernelModules = [ "amdgpu" ];
-
-  hardware.graphics.enable32Bit = true;
-
   networking.networkmanager.enable = true;
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "gaming"; # Define your hostname.
   networking.useDHCP = lib.mkDefault true;
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -86,6 +77,14 @@
   services.qemuGuest.enable = true;
   services.openssh.enable = true;
 
+  services.prometheus.exporters.node = {
+    enable = true;
+    port = 9100;
+    enabledCollectors = [ "logind" "systemd" ];
+    disabledCollectors = [ "textfile" ];
+    openFirewall = true;
+  };
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -97,15 +96,7 @@
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINiFPVXT03FdYS3BKuqNmgplaGrzNc6i++77vCI2AJ8c"
     ];
-    packages = with pkgs; [
-      kdePackages.kate
-      helix
-      tmux
-      nil
-      nh
-      nixfmt
-
-    ];
+    packages = with pkgs; [ kdePackages.kate helix nixfmt ];
     shell = pkgs.fish;
   };
 
@@ -119,6 +110,7 @@
     ssh.startAgent = true;
     firefox.enable = true;
     fish.enable = true;
+    gamescope.enable = true;
   };
 
   # Allow unfree packages
@@ -133,6 +125,12 @@
     ripgrep
     fd
     pciutils
+    hwdata
+    protonup-qt
+    doggo
+    curl
+    wget
+    nvtopPackages.amd
     #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     #  wget
 

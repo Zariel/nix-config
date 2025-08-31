@@ -23,12 +23,17 @@
     htop
     btop
     claude-code
+    atuin
+    gpu-viewer
+    wineWowPackages.waylandFull
+    nh
   ];
 
   programs = {
     fzf.enable = true;
     zoxide.enable = true;
     eza.enable = true;
+    lutris.enable = true;
   };
 
   programs.ssh = {

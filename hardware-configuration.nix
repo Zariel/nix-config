@@ -15,7 +15,21 @@
     "sd_mod"
     "sr_mod"
   ];
-  boot.initrd.kernelModules = [ ];
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = [
+    "console=tty0"
+    "console=ttyS0,115200n8"
+    "mitigations=off"
+    "amd_iommu=on"
+  ];
+  boot.initrd.kernelModules = [
+    "vfio_pci"
+    "vfio"
+    "vfio_iommu_type1"
+    "amdgpu" # Load after VFIO modules
+  ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
@@ -33,4 +47,29 @@
   swapDevices = [ ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+
+  hardware.enableAllFirmware = true;
+  hardware.firmware = with pkgs; [ linux-firmware ];
+
+  # Hardware acceleration with RDNA 4 support
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    extraPackages = with pkgs; [
+      mesa
+      amdvlk # Alternative Vulkan driver
+      rocmPackages.clr.icd # OpenCL support
+    ];
+    extraPackages32 = with pkgs; [ driversi686Linux.amdvlk ];
+  };
+
+  # Video drivers for display server
+  services.xserver.videoDrivers = [ "amdgpu" ];
+
+  # Environment variables for optimal performance
+  environment.variables = {
+    AMD_VULKAN_ICD = "RADV"; # Use Mesa RADV by default
+    ROC_ENABLE_PRE_VEGA = "1"; # Compatibility setting
+  };
+
 }

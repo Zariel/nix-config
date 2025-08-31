@@ -35,7 +35,7 @@
   };
 
   outputs = { self, nixpkgs, home-manager, nixos-hardware, ... }@attrs: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.gaming = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit attrs; };
       modules = [
