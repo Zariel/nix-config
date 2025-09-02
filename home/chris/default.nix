@@ -27,6 +27,7 @@
     gpu-viewer
     wineWowPackages.waylandFull
     nh
+    vlc
   ];
 
   programs = {

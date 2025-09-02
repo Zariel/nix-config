@@ -38,6 +38,11 @@
     LC_TIME = "en_GB.UTF-8";
   };
 
+  boot.kernel.sysctl = {
+    "net.core.default_qdisc" = "fq";
+    "net.ipv4.tcp_congestion_control" = "bbr";
+  };
+
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
   services.xserver.enable = true;
@@ -67,6 +72,27 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+    extraConfig.pipewire = {
+      "10-crackles" = {
+        "context.properties" = {
+          ## Properties for the DSP configuration.
+          "default.clock.rate" = 48000;
+          "default.clock.allowed-rates" = [ 44100 48000 96000 ];
+          "default.clock.min-quantum" = 16;
+        };
+
+        "context.modules" = [{
+          name = "libpipewire-module-rt";
+          args = {
+            "nice.level" = -12;
+            "rt.prio" = 89;
+            "rt.time.soft" = 200000;
+            "rt.time.hard" = 200000;
+          };
+          flags = [ "ifexists" "nofail" ];
+        }];
+      };
+    };
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
