@@ -23,6 +23,7 @@
     "console=ttyS0,115200n8"
     "mitigations=off"
     "amd_iommu=on"
+    "split_lock_detect=off"
   ];
   boot.initrd.kernelModules = [
     "vfio_pci"
